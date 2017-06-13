@@ -42,6 +42,7 @@ public class MessageInput extends RelativeLayout
     protected EditText messageInput;
     protected ImageButton messageSendButton;
     protected ImageButton attachmentButton;
+    protected ImageButton emotionButton;
     protected Space sendButtonSpace, attachmentButtonSpace;
 
     private CharSequence input;
@@ -169,6 +170,21 @@ public class MessageInput extends RelativeLayout
         this.attachmentButtonSpace.setVisibility(style.showAttachmentButton() ? VISIBLE : GONE);
         this.attachmentButtonSpace.getLayoutParams().width = style.getAttachmentButtonMargin();
 
+
+        this.attachmentButton.setImageDrawable(style.getAttachmentButtonIcon());
+        this.attachmentButton.getLayoutParams().width = style.getAttachmentButtonWidth();
+        this.attachmentButton.getLayoutParams().height = style.getAttachmentButtonHeight();
+
+        this.emotionButton.setVisibility(style.showEmotionButton() ? VISIBLE : GONE);
+        this.emotionButton.setBackground(style.getEmotionButtonBackground());
+        this.emotionButton.setImageDrawable(style.getEmotionButtonIcon());
+        this.emotionButton.getLayoutParams().width = style.getEmotionButtonWidth();
+        this.emotionButton.getLayoutParams().height = style.getEmotionButtonHeight();
+
+        this.emotionButton.setImageDrawable(style.getEmotionButtonIcon());
+        this.emotionButton.getLayoutParams().width = style.getEmotionButtonWidth();
+        this.emotionButton.getLayoutParams().height = style.getEmotionButtonHeight();
+
         this.messageSendButton.setBackground(style.getInputButtonBackground());
         this.messageSendButton.setImageDrawable(style.getInputButtonIcon());
         this.messageSendButton.getLayoutParams().width = style.getInputButtonWidth();
@@ -196,6 +212,7 @@ public class MessageInput extends RelativeLayout
         attachmentButton = (ImageButton) findViewById(R.id.attachmentButton);
         sendButtonSpace = (Space) findViewById(R.id.sendButtonSpace);
         attachmentButtonSpace = (Space) findViewById(R.id.attachmentButtonSpace);
+        emotionButton = (ImageButton) findViewById(R.id.emotionButton);
 
         messageSendButton.setOnClickListener(this);
         attachmentButton.setOnClickListener(this);

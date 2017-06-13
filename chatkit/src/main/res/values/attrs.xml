@@ -32,6 +32,21 @@
         <attr name="attachmentButtonWidth" format="dimension|reference"/>
         <attr name="attachmentButtonHeight" format="dimension|reference"/>
 
+        <attr name="showEmotionButton" format="boolean"/>
+        <attr name="emotionButtonBackground" format="reference"/>
+        <attr name="emotionButtonDefaultBgColor" format="color|reference"/>
+        <attr name="emotionButtonDefaultBgPressedColor" format="color|reference"/>
+        <attr name="emotionButtonDefaultBgDisabledColor" format="color|reference"/>
+
+        <attr name="emotionButtonIcon" format="reference"/>
+        <attr name="emotionButtonDefaultIconColor" format="color|reference"/>
+        <attr name="emotionButtonDefaultIconPressedColor" format="color|reference"/>
+        <attr name="emotionButtonDefaultIconDisabledColor" format="color|reference"/>
+
+        <attr name="emotionButtonMargin" format="dimension|reference"/>
+        <attr name="emotionButtonWidth" format="dimension|reference"/>
+        <attr name="emotionButtonHeight" format="dimension|reference"/>
+
         <attr name="inputMaxLines" format="integer"/>
         <attr name="inputHint" format="string"/>
 
