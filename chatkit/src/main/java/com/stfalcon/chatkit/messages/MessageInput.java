@@ -48,6 +48,7 @@ public class MessageInput extends RelativeLayout
     private CharSequence input;
     private InputListener inputListener;
     private AttachmentsListener attachmentsListener;
+    private EmotionListener emotionListener;
 
     public MessageInput(Context context) {
         super(context);
@@ -80,6 +81,10 @@ public class MessageInput extends RelativeLayout
      */
     public void setAttachmentsListener(AttachmentsListener attachmentsListener) {
         this.attachmentsListener = attachmentsListener;
+    }
+
+    public void setEmotionListener(EmotionListener emotionListener){
+        this.emotionListener = emotionListener;
     }
 
     /**
@@ -241,6 +246,10 @@ public class MessageInput extends RelativeLayout
          * @return if input text is valid, you must return {@code true} and input will be cleared, otherwise return false.
          */
         boolean onSubmit(CharSequence input);
+    }
+
+    public interface EmotionListener{
+        boolean onAddEmotion();
     }
 
     /**
