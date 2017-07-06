@@ -176,9 +176,6 @@ public class MessageInput extends RelativeLayout
 
         this.attachmentButtonSpace.setVisibility(style.showAttachmentButton() ? VISIBLE : GONE);
         this.attachmentButtonSpace.getLayoutParams().width = style.getAttachmentButtonMargin();
-
-<<<<<<< HEAD
-
         this.attachmentButton.setImageDrawable(style.getAttachmentButtonIcon());
         this.attachmentButton.getLayoutParams().width = style.getAttachmentButtonWidth();
         this.attachmentButton.getLayoutParams().height = style.getAttachmentButtonHeight();
@@ -194,8 +191,6 @@ public class MessageInput extends RelativeLayout
         this.emotionButton.getLayoutParams().height = style.getEmotionButtonHeight();
 
         this.messageSendButton.setBackground(style.getInputButtonBackground());
-=======
->>>>>>> 0987b4d676a0f7ea6742abe67ec4439eef36a2e2
         this.messageSendButton.setImageDrawable(style.getInputButtonIcon());
         this.messageSendButton.getLayoutParams().width = style.getInputButtonWidth();
         this.messageSendButton.getLayoutParams().height = style.getInputButtonHeight();
