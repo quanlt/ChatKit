@@ -1,4 +1,4 @@
-/*******************************************************************************
+/******************************************************************************
  * Copyright 2016 stfalcon.com
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 
 package com.stfalcon.chatkit.dialogs;
 
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
@@ -54,7 +55,9 @@ public class DialogsListAdapter<DIALOG extends IDialog>
     private Class<? extends BaseDialogViewHolder> holderClass;
     private ImageLoader imageLoader;
     private OnDialogClickListener<DIALOG> onDialogClickListener;
+    private OnDialogViewClickListener<DIALOG> onDialogViewClickListener;
     private OnDialogLongClickListener<DIALOG> onLongItemClickListener;
+    private OnDialogViewLongClickListener<DIALOG> onDialogViewLongClickListener;
     private DialogListStyle dialogStyle;
     private DateFormatter.Formatter datesFormatter;
 
@@ -96,7 +99,9 @@ public class DialogsListAdapter<DIALOG extends IDialog>
     public void onBindViewHolder(BaseDialogViewHolder holder, int position) {
         holder.setImageLoader(imageLoader);
         holder.setOnDialogClickListener(onDialogClickListener);
+        holder.setOnDialogViewClickListener(onDialogViewClickListener);
         holder.setOnLongItemClickListener(onLongItemClickListener);
+        holder.setOnDialogViewLongClickListener(onDialogViewLongClickListener);
         holder.setDatesFormatter(datesFormatter);
         holder.onBind(items.get(position));
     }
@@ -246,6 +251,7 @@ public class DialogsListAdapter<DIALOG extends IDialog>
      * @param message  New message
      * @return false if dialog doesn't exist.
      */
+    @SuppressWarnings("unchecked")
     public boolean updateDialogWithMessage(String dialogId, IMessage message) {
         boolean dialogExist = false;
         for (int i = 0; i < items.size(); i++) {
@@ -307,7 +313,7 @@ public class DialogsListAdapter<DIALOG extends IDialog>
     }
 
     /**
-     * @return the on click callback registered for this view.
+     * @return the item click callback.
      */
     public OnDialogClickListener getOnDialogClickListener() {
         return onDialogClickListener;
@@ -320,6 +326,22 @@ public class DialogsListAdapter<DIALOG extends IDialog>
      */
     public void setOnDialogClickListener(OnDialogClickListener<DIALOG> onDialogClickListener) {
         this.onDialogClickListener = onDialogClickListener;
+    }
+
+    /**
+     * @return the view click callback.
+     */
+    public OnDialogViewClickListener getOnDialogViewClickListener() {
+        return onDialogViewClickListener;
+    }
+
+    /**
+     * Register a callback to be invoked when dialog view is clicked.
+     *
+     * @param clickListener on click item callback
+     */
+    public void setOnDialogViewClickListener(OnDialogViewClickListener<DIALOG> clickListener) {
+        this.onDialogViewClickListener = clickListener;
     }
 
     /**
@@ -336,6 +358,22 @@ public class DialogsListAdapter<DIALOG extends IDialog>
      */
     public void setOnDialogLongClickListener(OnDialogLongClickListener<DIALOG> onLongItemClickListener) {
         this.onLongItemClickListener = onLongItemClickListener;
+    }
+
+    /**
+     * @return on view long click callback
+     */
+    public OnDialogViewLongClickListener<DIALOG> getOnDialogViewLongClickListener() {
+        return onDialogViewLongClickListener;
+    }
+
+    /**
+     * Register a callback to be invoked when item view is long clicked.
+     *
+     * @param clickListener on long click item callback
+     */
+    public void setOnDialogViewLongClickListener(OnDialogViewLongClickListener<DIALOG> clickListener) {
+        this.onDialogViewLongClickListener = clickListener;
     }
 
     /**
@@ -357,8 +395,16 @@ public class DialogsListAdapter<DIALOG extends IDialog>
         void onDialogClick(DIALOG dialog);
     }
 
+    public interface OnDialogViewClickListener<DIALOG extends IDialog> {
+        void onDialogViewClick(View view, DIALOG dialog);
+    }
+
     public interface OnDialogLongClickListener<DIALOG extends IDialog> {
         void onDialogLongClick(DIALOG dialog);
+    }
+
+    public interface OnDialogViewLongClickListener<DIALOG extends IDialog> {
+        void onDialogViewLongClick(View view, DIALOG dialog);
     }
 
     /*
@@ -368,8 +414,10 @@ public class DialogsListAdapter<DIALOG extends IDialog>
             extends ViewHolder<DIALOG> {
 
         protected ImageLoader imageLoader;
-        protected OnDialogClickListener onDialogClickListener;
-        protected OnDialogLongClickListener onLongItemClickListener;
+        protected OnDialogClickListener<DIALOG> onDialogClickListener;
+        protected OnDialogLongClickListener<DIALOG> onLongItemClickListener;
+        protected OnDialogViewClickListener<DIALOG> onDialogViewClickListener;
+        protected OnDialogViewLongClickListener<DIALOG> onDialogViewLongClickListener;
         protected DateFormatter.Formatter datesFormatter;
 
         public BaseDialogViewHolder(View itemView) {
@@ -380,12 +428,20 @@ public class DialogsListAdapter<DIALOG extends IDialog>
             this.imageLoader = imageLoader;
         }
 
-        void setOnDialogClickListener(OnDialogClickListener onDialogClickListener) {
+        void setOnDialogClickListener(OnDialogClickListener<DIALOG> onDialogClickListener) {
             this.onDialogClickListener = onDialogClickListener;
         }
 
-        void setOnLongItemClickListener(OnDialogLongClickListener onLongItemClickListener) {
+        void setOnDialogViewClickListener(OnDialogViewClickListener<DIALOG> onDialogViewClickListener) {
+            this.onDialogViewClickListener = onDialogViewClickListener;
+        }
+
+        void setOnLongItemClickListener(OnDialogLongClickListener<DIALOG> onLongItemClickListener) {
             this.onLongItemClickListener = onLongItemClickListener;
+        }
+
+        void setOnDialogViewLongClickListener(OnDialogViewLongClickListener<DIALOG> onDialogViewLongClickListener) {
+            this.onDialogViewLongClickListener = onDialogViewLongClickListener;
         }
 
         public void setDatesFormatter(DateFormatter.Formatter dateHeadersFormatter) {
@@ -475,17 +531,17 @@ public class DialogsListAdapter<DIALOG extends IDialog>
 
                 if (tvName != null) {
                     tvName.setTextColor(dialogStyle.getDialogTitleTextColor());
-                    tvName.setTypeface(tvName.getTypeface(), dialogStyle.getDialogTitleTextStyle());
+                    tvName.setTypeface(Typeface.DEFAULT, dialogStyle.getDialogTitleTextStyle());
                 }
 
                 if (tvDate != null) {
                     tvDate.setTextColor(dialogStyle.getDialogDateColor());
-                    tvDate.setTypeface(tvDate.getTypeface(), dialogStyle.getDialogDateStyle());
+                    tvDate.setTypeface(Typeface.DEFAULT, dialogStyle.getDialogDateStyle());
                 }
 
                 if (tvLastMessage != null) {
                     tvLastMessage.setTextColor(dialogStyle.getDialogMessageTextColor());
-                    tvLastMessage.setTypeface(tvLastMessage.getTypeface(), dialogStyle.getDialogMessageTextStyle());
+                    tvLastMessage.setTypeface(Typeface.DEFAULT, dialogStyle.getDialogMessageTextStyle());
                 }
             }
         }
@@ -498,17 +554,17 @@ public class DialogsListAdapter<DIALOG extends IDialog>
 
                 if (tvName != null) {
                     tvName.setTextColor(dialogStyle.getDialogUnreadTitleTextColor());
-                    tvName.setTypeface(tvName.getTypeface(), dialogStyle.getDialogUnreadTitleTextStyle());
+                    tvName.setTypeface(Typeface.DEFAULT, dialogStyle.getDialogUnreadTitleTextStyle());
                 }
 
                 if (tvDate != null) {
                     tvDate.setTextColor(dialogStyle.getDialogUnreadDateColor());
-                    tvDate.setTypeface(tvDate.getTypeface(), dialogStyle.getDialogUnreadDateStyle());
+                    tvDate.setTypeface(Typeface.DEFAULT, dialogStyle.getDialogUnreadDateStyle());
                 }
 
                 if (tvLastMessage != null) {
                     tvLastMessage.setTextColor(dialogStyle.getDialogUnreadMessageTextColor());
-                    tvLastMessage.setTypeface(tvLastMessage.getTypeface(), dialogStyle.getDialogUnreadMessageTextStyle());
+                    tvLastMessage.setTypeface(Typeface.DEFAULT, dialogStyle.getDialogUnreadMessageTextStyle());
                 }
             }
         }
@@ -553,24 +609,31 @@ public class DialogsListAdapter<DIALOG extends IDialog>
             tvBubble.setVisibility(dialogStyle.isDialogUnreadBubbleEnabled() &&
                     dialog.getUnreadCount() > 0 ? VISIBLE : GONE);
 
-            if (onDialogClickListener != null) {
-                container.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onDialogClickListener != null) {
                         onDialogClickListener.onDialogClick(dialog);
                     }
-                });
-            }
-
-            if (onLongItemClickListener != null) {
-                container.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        onLongItemClickListener.onDialogLongClick(dialog);
-                        return true;
+                    if (onDialogViewClickListener != null) {
+                        onDialogViewClickListener.onDialogViewClick(view, dialog);
                     }
-                });
-            }
+                }
+            });
+
+
+            container.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (onLongItemClickListener != null) {
+                        onLongItemClickListener.onDialogLongClick(dialog);
+                    }
+                    if (onDialogViewLongClickListener != null) {
+                        onDialogViewLongClickListener.onDialogViewLongClick(view, dialog);
+                    }
+                    return onLongItemClickListener != null || onDialogViewLongClickListener != null;
+                }
+            });
         }
 
         protected String getDateString(Date date) {
